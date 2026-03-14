@@ -1,0 +1,6 @@
+{
+  "firebase_hosting": {
+    "deploymentHostingUrl": "https://YOUR_FIREBASE_PROJECT_ID.web.app"
+  },
+  "cloud_run_deploy": {}
+}

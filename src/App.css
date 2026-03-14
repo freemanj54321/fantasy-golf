@@ -1,0 +1,90 @@
+/* General App Layout */
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* App Header */
+.App-header {
+  background-color: var(--primary-color);
+  /* Masters Dark Green */
+  color: #FFFFFF;
+  border-bottom: 2px solid var(--secondary-color);
+  /* Gold border */
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Main Content Area - Renamed from App-main */
+.App-content {
+  flex-grow: 1;
+  padding: 2rem;
+  background-color: var(--background-color);
+  /* Deep green */
+}
+
+/* App Footer */
+.App-footer {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  background-color: var(--primary-color);
+  /* Masters Dark Green */
+  border-top: 2px solid var(--secondary-color);
+  /* Gold border */
+  font-size: 0.9em;
+  color: #E9ECEF;
+  /* Lighter text for contrast */
+}
+
+
+
+.App-header .nav-button.active {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+
+/* Container for page content */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Page Title Styles */
+.page-title {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  color: var(--secondary-color);
+  font-family: serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  border: 4px solid var(--border-color);
+  /* Dark green border */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  border-color: var(--secondary-color);
+  /* Highlight border on hover */
+}
+
+/* Transitions for a smoother experience */
+a,
+button {
+  transition: all 0.3s ease-in-out;
+}

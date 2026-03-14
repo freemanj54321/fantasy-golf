@@ -1,0 +1,199 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================
+    // Helper Functions
+    // ============================================
+
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user has admin role (via custom claims or email)
+    function isAdmin() {
+      return isAuthenticated() &&
+             (request.auth.token.admin == true ||
+              request.auth.token.email == 'freemanj54321@gmail.com');
+    }
+
+    // ============================================
+    // PGA Schedule Collection
+    // ============================================
+    // Tournament schedule data
+    // Read: All authenticated users
+    // Write: Admins only
+    match /PGA-Schedule/{document} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // World Rankings Collection
+    // ============================================
+    // Golf world rankings data
+    // Read: All authenticated users
+    // Write: Admins only
+    match /World-Rankings/{document} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // Golf Rankings Collection
+    // ============================================
+    // World golf rankings (actual collection name used in code)
+    // Read: All authenticated users
+    // Write: Admins only
+    match /golf-rankings/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // Tournament Field Collection
+    // ============================================
+    // Players registered for tournaments
+    // Read: All authenticated users
+    // Write: Admins only
+    match /Tournament-Field/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // Tournament Players Collection
+    // ============================================
+    // Players participating in tournaments
+    // Read: All authenticated users
+    // Write: Admins only
+    match /Tournament-Players/{document} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // Tournament Results Collection
+    // ============================================
+    // Tournament leaderboard and scores
+    // Read: All authenticated users
+    // Write: Admins only
+    match /Tournament-Results/{document} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // FantasyGolf Teams Collection
+    // ============================================
+    // Fantasy golf teams - admin managed
+    // Read: All authenticated users
+    // Create/Update/Delete: Admin only
+    match /FantasyGolf-Teams/{teamId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ============================================
+    // Settings Collection
+    // ============================================
+    // App configuration (autosync targets, etc.)
+    // Read/Write: Admins only
+    match /Settings/{document} {
+      allow read, write: if isAdmin();
+    }
+
+    // ============================================
+    // SyncLogs Collection
+    // ============================================
+    // Sync run history - written by Cloud Functions (Admin SDK) and admin users
+    match /SyncLogs/{document} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // Player Scorecards Collection
+    // ============================================
+    // Hole-by-hole scorecard data
+    // Read: All authenticated users
+    // Write: Admins only
+    match /Player-Scorecards/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // FantasyGolf Results Collection
+    // ============================================
+    // League player scores per round
+    // Read: All authenticated users
+    // Write: Admins only
+    match /FantasyGolf-Results/{document} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // Raw Tournament Results Collection
+    // ============================================
+    // Raw API response archive
+    // Read/Write: Admins only
+    match /raw-tournament-results/{document} {
+      allow read, write: if isAdmin();
+    }
+
+    // ============================================
+    // League Settings Collection
+    // ============================================
+    // Per-year league configuration (team count, draft status, etc.)
+    // Read: All authenticated users
+    // Write: Admins only
+    match /League-Settings/{document} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // Season Records Collection
+    // ============================================
+    // Historical season records (champions, standings, stats)
+    // Read: All authenticated users
+    // Write: Admins only
+    match /Season-Records/{year} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // Tee Times Collection
+    // ============================================
+    // Round tee time data for tournament players
+    // Read: All authenticated users
+    // Write: Admins only
+    match /TeeTimes/{document} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================
+    // Scorecard Sync Collection
+    // ============================================
+    // Tracks per-player per-round sync scheduling (tee time, round complete, last/next check).
+    // Read/Write: Admins only — internal sync tracking data.
+    match /Scorecard-Sync/{document} {
+      allow read, write: if isAdmin();
+    }
+
+    // ============================================
+    // Default Deny
+    // ============================================
+    // Deny access to all other collections by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
